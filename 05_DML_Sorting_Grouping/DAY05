@@ -1,0 +1,24 @@
+USE study_db;
+
+-- 이름을 기준으로 오름차순 정렬 (가나다 순)
+SELECT * FROM members
+ORDER BY name ASC;
+
+-- 가입일(created_at)을 기준으로 최신순(내림차순) 정렬
+SELECT * FROM members
+ORDER BY created_at DESC;
+
+-- 실습을 위해 members 테이블에 domain 컬럼을 추가하고 데이터를 업데이트합니다.
+ALTER TABLE members ADD COLUMN domain VARCHAR(50);
+UPDATE members SET domain = SUBSTRING_INDEX(email, '@', -1);
+
+-- 도메인별로 몇 명의 회원이 있는지 그룹화하여 개수 세기
+SELECT domain, COUNT(*) AS user_count
+FROM members
+GROUP BY domain;
+
+-- 그룹화된 결과 중, 회원 수가 1명'초과'인 도메인만 조회
+SELECT domain, COUNT(*) AS user_count
+FROM members
+GROUP BY domain
+HAVING user_count > 1;
